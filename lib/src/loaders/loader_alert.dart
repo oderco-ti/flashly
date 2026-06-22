@@ -17,9 +17,9 @@ void showLoaderAlert({
   int? closeLoaderAfterSecs,
   BuildContext? context,
 }) {
-  final placeholdr = placeholder != null ? '$placeholder...' : '';
+  final placeholderText = placeholder != null ? '$placeholder...' : '';
   showAlert(
-    placeholdr,
+    placeholderText,
     context: context,
     asLoader: true,
     isDestructive: true,

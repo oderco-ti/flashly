@@ -1,7 +1,23 @@
 import 'package:audioplayers/audioplayers.dart';
 
 Future<void> playAudio(String path) async {
-  await AudioPlayer().play(AssetSource(path));
+  final player = AudioPlayer();
+
+  await player.setAudioContext(
+    AudioContext(
+      iOS: AudioContextIOS(
+        category: AVAudioSessionCategory.ambient,
+      ),
+    ),
+  );
+
+  await player.setReleaseMode(ReleaseMode.stop);
+
+  await player.play(AssetSource(path));
+
+  player.onPlayerComplete.listen((event) {
+    player.dispose();
+  });
 }
 
 Future<void> playAlert({

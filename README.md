@@ -1,10 +1,10 @@
 # Flashly
 
-[![Version](https://img.shields.io/badge/version-0.0.1-blue)](https://github.com/oderco-ti/flashly)
+[![Version](https://img.shields.io/badge/version-0.0.1-blue)](https://github.com/7adans/flashly)
 [![Flutter](https://img.shields.io/badge/Flutter-%3E%3D3.44.0-02569B?logo=flutter&logoColor=white)](https://flutter.dev)
 [![Dart](https://img.shields.io/badge/Dart-%3E%3D3.12.0-0175C2?logo=dart&logoColor=white)](https://dart.dev)
 [![Platform](https://img.shields.io/badge/platform-iOS%20%7C%20Android%20%7C%20Web%20%7C%20macOS-lightgrey)](https://flutter.dev)
-[![GitHub](https://img.shields.io/badge/GitHub-oderco--ti%2Fflashly-181717?logo=github)](https://github.com/oderco-ti/flashly)
+[![GitHub](https://img.shields.io/badge/GitHub-7adans%2Fflashly-181717?logo=github)](https://github.com/7adans/flashly)
 
 Alerts, toasts, loaders, and haptic/sound feedback for Flutter apps. Flashly provides a consistent, platform-aware UI layer for transient messages and modal dialogs, with optional Lottie animations and native-style styling.
 

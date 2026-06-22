@@ -30,10 +30,6 @@ Future<T?> showAlert<T>(
   Future<void> Function()? onPositive,
   bool enableHaptics = false,
   bool enableSound = false,
-  bool success = false,
-  bool info = false,
-  bool error = false,
-  Color? infoIconColor,
   double? radius,
   double? actionButtonRadius,
   VoidCallback? onTapRichTitle,
@@ -60,7 +56,6 @@ Future<T?> showAlert<T>(
     asLoader: asLoader,
     closeLoaderAfterSecs: closeLoaderAfterSecs,
     state: state,
-    infoIconColor: infoIconColor,
     context: context,
     radius: radius,
     actionButtonRadius: actionButtonRadius,
@@ -69,6 +64,7 @@ Future<T?> showAlert<T>(
     richTitleColor: richTitleColor,
     richDescriptionColor: richDescriptionColor,
     richDescriptionFontStyle: richDescriptionFontStyle,
+    hapticsEnabled: enableHaptics,
   );
 }
 
@@ -91,9 +87,9 @@ Future<T?> _showDialog<T>(
   Color? richTitleColor,
   Color? richDescriptionColor,
   AlertState? state,
-  Color? infoIconColor,
   double? radius,
   double? actionButtonRadius,
+  bool hapticsEnabled = true,
 }) async {
   bool showButton = false;
   bool timerStarted = false;
@@ -102,9 +98,10 @@ Future<T?> _showDialog<T>(
     return AlertActionButton(
       text: negativeTitle ?? 'Cancelar',
       isDestructive: positiveTitle == null && isDestructive,
-      isDestrutiveCancel: positiveTitle != null && isDestructive,
+      isDestructiveCancel: positiveTitle != null && isDestructive,
       isPositive: positiveTitle == null,
       radius: actionButtonRadius,
+      hapticsEnabled: hapticsEnabled,
       onPressed: () {
         Navigator.pop(context ?? Flashly.context);
         if (onNegative != null) onNegative();
@@ -243,6 +240,7 @@ Future<T?> _showDialog<T>(
                         isPositive: !isDestructive,
                         isDestructive: isDestructive,
                         radius: actionButtonRadius,
+                        hapticsEnabled: hapticsEnabled,
                         onPressed: () {
                           Navigator.pop(context ?? Flashly.context);
                           if (onPositive != null) onPositive();

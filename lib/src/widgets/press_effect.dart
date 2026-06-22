@@ -8,10 +8,12 @@ class PressEffect extends StatefulWidget {
     super.key,
     required this.child,
     required this.onPressed,
+    this.isHapticsEnabled = true,
   });
 
   final Widget child;
   final VoidCallback? onPressed;
+  final bool isHapticsEnabled;
 
   @override
   State<PressEffect> createState() => _PressEffectState();
@@ -29,7 +31,9 @@ class _PressEffectState extends State<PressEffect> {
       onTap: widget.onPressed == null
           ? null
           : () {
-              haptics();
+              if (widget.isHapticsEnabled) {
+                haptics();
+              }
               setState(() => _pressed = true);
               Timer(const Duration(milliseconds: 200), () => setState(() => _pressed = false));
               widget.onPressed?.call();

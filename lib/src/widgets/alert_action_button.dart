@@ -16,15 +16,16 @@ class AlertActionButton extends StatefulWidget {
     this.fontWeight,
     this.radius,
     this.isDestructive = false,
-    this.isDestrutiveCancel = false,
+    this.isDestructiveCancel = false,
     this.isPositive = false,
+    this.hapticsEnabled = true,
   });
 
   final VoidCallback? onPressed;
   final FontWeight? fontWeight;
   final String text;
   final double? fontSize;
-  final bool isDestructive, isPositive, isDestrutiveCancel;
+  final bool isDestructive, isPositive, isDestructiveCancel, hapticsEnabled;
   final double? radius;
 
   @override
@@ -40,25 +41,25 @@ class _AlertActionButtonState extends State<AlertActionButton> {
     BuildContext context, {
     required Widget child,
   }) {
-    late Color backgroungColor;
+    late Color backgroundColor;
 
-    if (widget.isDestrutiveCancel) {
-      backgroungColor = destructiveRed.withValues(alpha: .15);
+    if (widget.isDestructiveCancel) {
+      backgroundColor = destructiveRed.withValues(alpha: .15);
     } else if (widget.isDestructive) {
-      backgroungColor = destructiveRed;
+      backgroundColor = destructiveRed;
     } else if (widget.isPositive) {
-      backgroungColor = _primaryColor.withValues(alpha: 1);
+      backgroundColor = _primaryColor.withValues(alpha: 1);
     } else {
-      backgroungColor = _primaryColor.withValues(alpha: .15);
+      backgroundColor = _primaryColor.withValues(alpha: .15);
     }
 
     return PressEffect(
-      onPressed: widget.onPressed?.hapticCallback,
+      onPressed: () => widget.onPressed?.hapticCallback(widget.hapticsEnabled),
       child: Container(
         height: 48,
         decoration: BoxDecoration(
           borderRadius: _borderRadius,
-          color: backgroungColor,
+          color: backgroundColor,
         ),
         child: child,
       ),
@@ -70,13 +71,13 @@ class _AlertActionButtonState extends State<AlertActionButton> {
     late Color overlayColor;
     late Color color;
 
-    if (widget.isDestrutiveCancel || widget.isDestructive) {
+    if (widget.isDestructiveCancel || widget.isDestructive) {
       overlayColor = destructiveRed;
     } else {
       overlayColor = _primaryColor;
     }
 
-    if (widget.isDestrutiveCancel) {
+    if (widget.isDestructiveCancel) {
       color = destructiveRed;
     } else if (widget.isPositive || widget.isDestructive) {
       color = Theme.of(context).cardColor;
@@ -100,7 +101,7 @@ class _AlertActionButtonState extends State<AlertActionButton> {
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
           borderRadius: _borderRadius,
           color: Colors.transparent,
-          onPressed: widget.onPressed?.hapticCallback,
+          onPressed: () => widget.onPressed?.hapticCallback(widget.hapticsEnabled),
           child: child,
         ),
       );
@@ -109,7 +110,7 @@ class _AlertActionButtonState extends State<AlertActionButton> {
     return _buildButtonDecoration(
       context,
       child: ElevatedButton(
-        onPressed: widget.onPressed?.hapticCallback,
+        onPressed: () => widget.onPressed?.hapticCallback(widget.hapticsEnabled),
         style: ElevatedButton.styleFrom(
           elevation: 0,
           shadowColor: Colors.transparent,
