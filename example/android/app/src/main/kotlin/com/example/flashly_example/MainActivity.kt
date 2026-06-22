@@ -1,0 +1,5 @@
+package com.example.flashly_example
+
+import io.flutter.embedding.android.FlutterActivity
+
+class MainActivity : FlutterActivity()
