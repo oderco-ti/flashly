@@ -31,6 +31,8 @@ class RichTxt extends StatelessWidget {
     this.letterSpacing,
     this.letterSpacing1,
     this.letterSpacing2,
+    this.maxLines,
+    this.overflow,
   });
 
   final FontWeight? fontWeight;
@@ -60,11 +62,15 @@ class RichTxt extends StatelessWidget {
   final TextOverflow? textOverflow2;
   final FontStyle? fontStyle1;
   final FontStyle? fontStyle2;
+  final int? maxLines;
+  final TextOverflow? overflow;
 
   @override
   Widget build(BuildContext context) {
     return Text.rich(
       textAlign: textAlign,
+      maxLines: maxLines,
+      overflow: overflow ?? TextOverflow.clip,
       TextSpan(
         children: [
           TextSpan(

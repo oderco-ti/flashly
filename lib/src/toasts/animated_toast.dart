@@ -181,9 +181,13 @@ class _AnimatedToastState extends State<AnimatedToast> with SingleTickerProvider
                             fontWeight: .w500,
                             decoration: .none,
                             letterSpacing: -0.4,
+                            maxLines: 4,
+                            overflow: TextOverflow.ellipsis,
                           )
                         : Text(
                             widget.message,
+                            maxLines: 4,
+                            overflow: TextOverflow.ellipsis,
                             style: TextStyle(
                               color: Colors.white,
                               fontSize: widget.fontSize ?? 15,
