@@ -120,7 +120,7 @@ Widget _buildAlert(
               child: AlertActionButton(
                 text: negativeTitle ?? 'Cancel',
                 isDestructive: positiveTitle == null && isDestructive,
-                isDestrutiveCancel: positiveTitle != null && isDestructive,
+                isDestructiveCancel: positiveTitle != null && isDestructive,
                 isPositive: positiveTitle == null,
                 onPressed: _noop,
               ),

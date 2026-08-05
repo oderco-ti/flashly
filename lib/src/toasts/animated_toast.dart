@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:flashly/src/toasts/toast_state.dart';
 import 'package:flashly/src/widgets/rich_txt.dart';
@@ -58,7 +59,7 @@ class _AnimatedToastState extends State<AnimatedToast> with SingleTickerProvider
 
     _opacityAnimation = CurvedAnimation(
       parent: _controller,
-      curve: const Interval(0, .4, curve: Curves.linear),
+      curve: const Interval(0, .1, curve: Curves.linear),
     );
 
     _controller.forward();
@@ -130,78 +131,92 @@ class _AnimatedToastState extends State<AnimatedToast> with SingleTickerProvider
           },
           child: Material(
             color: Colors.transparent,
-            child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-              constraints: const BoxConstraints(
-                minWidth: 100,
-                maxWidth: 330,
-                maxHeight: 250,
-              ),
-              decoration: BoxDecoration(
-                color: const Color(0xFF2C2C2E).withValues(alpha: 0.96),
-                borderRadius: BorderRadius.circular(16),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withValues(alpha: 0.3),
-                    blurRadius: 20,
-                    offset: const Offset(0, 10),
-                  ),
-                ],
-              ),
-              child: Row(
-                spacing: 12,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Icon(
-                    widget.icon ??
-                        (widget.state == ToastState.error
-                            ? CupertinoIcons.exclamationmark_circle
-                            : widget.state == ToastState.info
-                            ? CupertinoIcons.info_circle
-                            : CupertinoIcons.check_mark_circled),
-                    color: widget.iconColor ??
-                        (widget.state == ToastState.error
-                            ? Colors.red.shade300
-                            : widget.state == ToastState.info
-                            ? Colors.amber.shade300
-                            : Colors.green.shade300),
-                    size: 22,
-                  ),
-                  Flexible(
-                    fit: FlexFit.loose,
-                    child: widget.richMessage != null
-                        ? RichTxt(
-                            text1: widget.message,
-                            text2: widget.richMessage!,
-                            color: Colors.white,
-                            textOverflow1: .ellipsis,
-                            textOverflow2: .ellipsis,
-                            fontStyle2: widget.richMessageFontStyle,
-                            fontSize: widget.fontSize ?? 15,
-                            fontWeight: .w500,
-                            decoration: .none,
-                            letterSpacing: -0.4,
-                            maxLines: 4,
-                            overflow: TextOverflow.ellipsis,
-                          )
-                        : Text(
-                            widget.message,
-                            maxLines: 4,
-                            overflow: TextOverflow.ellipsis,
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: widget.fontSize ?? 15,
-                              fontWeight: FontWeight.w500,
-                              decoration: TextDecoration.none,
-                              letterSpacing: -0.4,
-                            ),
-                          ),
-                  ),
-                ],
-              ),
-            ),
+            child: Platform.isIOS
+                ? ClipRRect(
+                    borderRadius: BorderRadius.circular(16),
+                    child: BackdropFilter(
+                      filter: .blur(sigmaX: 8, sigmaY: 8),
+                      child: _buildContent(),
+                    ),
+                  )
+                : _buildContent(),
           ),
         ),
+      ),
+    );
+  }
+
+  IconData get _defaultIcon => switch (widget.state) {
+        ToastState.error => CupertinoIcons.exclamationmark_circle,
+        ToastState.info => CupertinoIcons.info_circle,
+        _ => CupertinoIcons.check_mark_circled,
+      };
+
+  Color get _defaultIconColor => switch (widget.state) {
+        ToastState.error => Colors.red.shade300,
+        ToastState.info => Colors.amber.shade300,
+        _ => Colors.green.shade300,
+      };
+
+  Widget _buildContent() {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+      constraints: const BoxConstraints(
+        minWidth: 100,
+        maxWidth: 330,
+        maxHeight: 250,
+      ),
+      decoration: BoxDecoration(
+        color: const Color(0xFF2C2C2E).withValues(alpha: Platform.isIOS ? .8 : 0.96),
+        borderRadius: BorderRadius.circular(16),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.3),
+            blurRadius: 20,
+            offset: const Offset(0, 10),
+          ),
+        ],
+      ),
+      child: Row(
+        spacing: 12,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(
+            widget.icon ?? _defaultIcon,
+            color: widget.iconColor ?? _defaultIconColor,
+            size: 22,
+          ),
+          Flexible(
+            fit: FlexFit.loose,
+            child: widget.richMessage != null
+                ? RichTxt(
+                    text1: widget.message,
+                    text2: widget.richMessage!,
+                    color: Colors.white,
+                    textOverflow1: .ellipsis,
+                    textOverflow2: .ellipsis,
+                    fontStyle2: widget.richMessageFontStyle,
+                    fontSize: widget.fontSize ?? 15,
+                    fontWeight: .w500,
+                    decoration: .none,
+                    letterSpacing: -0.4,
+                    maxLines: 4,
+                    overflow: TextOverflow.ellipsis,
+                  )
+                : Text(
+                    widget.message,
+                    maxLines: 4,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: widget.fontSize ?? 15,
+                      fontWeight: FontWeight.w500,
+                      decoration: TextDecoration.none,
+                      letterSpacing: -0.4,
+                    ),
+                  ),
+          ),
+        ],
       ),
     );
   }
