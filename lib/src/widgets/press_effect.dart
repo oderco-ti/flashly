@@ -21,13 +21,35 @@ class PressEffect extends StatefulWidget {
 
 class _PressEffectState extends State<PressEffect> {
   bool _pressed = false;
+  Timer? _releaseTimer;
+
+  void _releaseAfterDelay() {
+    _releaseTimer?.cancel();
+    _releaseTimer = Timer(const Duration(milliseconds: 200), () {
+      if (mounted) {
+        setState(() => _pressed = false);
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _releaseTimer?.cancel();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTapDown: widget.onPressed == null ? null : (_) => setState(() => _pressed = true),
-      onTapUp: widget.onPressed == null ? null : (_) => setState(() => _pressed = false),
-      onTapCancel: widget.onPressed == null ? null : () => setState(() => _pressed = false),
+      onTapDown: widget.onPressed == null
+          ? null
+          : (_) => setState(() => _pressed = true),
+      onTapUp: widget.onPressed == null
+          ? null
+          : (_) => setState(() => _pressed = false),
+      onTapCancel: widget.onPressed == null
+          ? null
+          : () => setState(() => _pressed = false),
       onTap: widget.onPressed == null
           ? null
           : () {
@@ -35,7 +57,7 @@ class _PressEffectState extends State<PressEffect> {
                 haptics();
               }
               setState(() => _pressed = true);
-              Timer(const Duration(milliseconds: 200), () => setState(() => _pressed = false));
+              _releaseAfterDelay();
               widget.onPressed?.call();
             },
       child: AnimatedOpacity(

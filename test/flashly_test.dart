@@ -8,7 +8,10 @@ void main() {
   group('Flashly', () {
     test('navigatorKey and scaffoldMessengerKey are initialized', () {
       expect(Flashly.navigatorKey, isA<GlobalKey<NavigatorState>>());
-      expect(Flashly.scaffoldMessengerKey, isA<GlobalKey<ScaffoldMessengerState>>());
+      expect(
+        Flashly.scaffoldMessengerKey,
+        isA<GlobalKey<ScaffoldMessengerState>>(),
+      );
     });
   });
 
@@ -58,15 +61,34 @@ void main() {
 
       expect(pressed, isTrue);
     });
+
+    testWidgets('cancels the release timer when disposed', (tester) async {
+      var visible = true;
+
+      await tester.pumpFlashlyApp(
+        StatefulBuilder(
+          builder: (context, setState) => visible
+              ? PressEffect(
+                  onPressed: () => setState(() => visible = false),
+                  child: const Text('Remove me'),
+                )
+              : const SizedBox.shrink(),
+        ),
+      );
+
+      await tester.tap(find.text('Remove me'));
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 200));
+
+      expect(find.text('Remove me'), findsNothing);
+      expect(tester.takeException(), isNull);
+    });
   });
 
   group('AlertActionButton', () {
     testWidgets('renders button label', (tester) async {
       await tester.pumpFlashlyApp(
-        AlertActionButton(
-          text: 'Confirmar',
-          onPressed: () {},
-        ),
+        AlertActionButton(text: 'Confirmar', onPressed: () {}),
       );
 
       expect(find.text('Confirmar'), findsOneWidget);
@@ -74,7 +96,9 @@ void main() {
   });
 
   group('loader', () {
-    testWidgets('renders adaptive progress indicator by default', (tester) async {
+    testWidgets('renders adaptive progress indicator by default', (
+      tester,
+    ) async {
       await tester.pumpFlashlyApp(loader());
 
       expect(find.byType(CircularProgressIndicator), findsOneWidget);
